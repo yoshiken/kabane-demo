@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx1-svc
+  labels:
+    app: nginx1
+spec:
+  ports:
+    - name: nginx1-port
+      protocol: "TCP"
+      port: 8080
+      targetPort: nginx1-port
+  selector:
+    app: nginx1
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx1-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx1
+  template:
+    metadata:
+      labels:
+        app: nginx1
+    spec:
+      containers:
+      - name: nginx1
+        image: yoshiken/kabane-demo:nginx1
+        ports:
+        - containerPort: 80
+          name: nginx1-port
+          protocol: TCP
